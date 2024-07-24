@@ -27,14 +27,14 @@ db.connect(err => {
 
 // Endpoint to handle form submissions
 app.post('/submit', (req, res) => {
-    const { name, city, phone } = req.body;
+    const { name, city, phone, source } = req.body;
     
     if (!name || !city || !phone) {
         return res.status(400).send('All fields are required');
     }
 
-    const query = 'INSERT INTO form_data (name, city, phone) VALUES (?, ?, ?)';
-    db.query(query, [name, city, phone], (err, result) => {
+    const query = 'INSERT INTO form_data (name, city, phone, source) VALUES (?, ?, ?)';
+    db.query(query, [name, city, phone, source], (err, result) => {
         if (err) throw err;
         res.send('Form data saved successfully');
     });
