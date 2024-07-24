@@ -15,7 +15,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 const db = mysql.createConnection({
     host: 'localhost',
     user: 'root',
-    password: 'your_password', // Replace with your actual password or use an environment variable
+    password: 'Loginamd@321', // Replace with your actual password or use an environment variable
     database: 'swiggydata' // Ensure your database name is correct
 });
 
