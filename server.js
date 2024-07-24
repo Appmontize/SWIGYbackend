@@ -40,6 +40,19 @@ app.post('/submit', (req, res) => {
     });
 });
 
+// Endpoint to fetch delivery partner data
+app.get('/api/delivery-partners', (req, res) => {
+    const query = 'SELECT * FROM form_data';
+    db.query(query, (err, results) => {
+        if (err) {
+            console.error('Error fetching data from MySQL:', err);
+            res.status(500).send('Error fetching data');
+        } else {
+            res.json(results);
+        }
+    });
+});
+
 // Start the server
 app.listen(port, () => {
     console.log(`Server running on port ${port}`);
