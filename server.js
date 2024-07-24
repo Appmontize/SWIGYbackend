@@ -8,20 +8,23 @@ const port = 3015;
 
 // Middleware
 app.use(cors());
-app.use(bodyParser.json()); // For parsing application/json
-app.use(bodyParser.urlencoded({ extended: true })); // For parsing application/x-www-form-urlencoded
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
 // Create MySQL connection
 const db = mysql.createConnection({
     host: 'localhost',
     user: 'root',
-    password: 'Loginamd@321',
-    database: 'swiggydata' // Note: Ensure your database name is correct
+    password: 'your_password', // Replace with your actual password or use an environment variable
+    database: 'swiggydata' // Ensure your database name is correct
 });
 
 // Connect to MySQL
 db.connect(err => {
-    if (err) throw err;
+    if (err) {
+        console.error('Database connection failed:', err);
+        return;
+    }
     console.log('MySQL connected...');
 });
 
@@ -30,13 +33,16 @@ app.post('/submit', (req, res) => {
     const { name, city, phone, source } = req.body;
     
     if (!name || !city || !phone || !source) {
-        return res.status(400).send('All fields are required');
+        return res.status(400).json({ success: false, message: 'All fields are required' });
     }
 
-    const query = 'INSERT INTO form_data (name, city, phone, source) VALUES (?, ?, ?)';
+    const query = 'INSERT INTO form_data (name, city, phone, source) VALUES (?, ?, ?, ?)';
     db.query(query, [name, city, phone, source], (err, result) => {
-        if (err) throw err;
-        res.send('Form data saved successfully');
+        if (err) {
+            console.error('Error saving data:', err);
+            return res.status(500).json({ success: false, message: 'Failed to save data' });
+        }
+        res.json({ success: true, message: 'Form data saved successfully' });
     });
 });
 
@@ -46,10 +52,9 @@ app.get('/api/delivery-partners', (req, res) => {
     db.query(query, (err, results) => {
         if (err) {
             console.error('Error fetching data from MySQL:', err);
-            res.status(500).send('Error fetching data');
-        } else {
-            res.json(results);
+            return res.status(500).send('Error fetching data');
         }
+        res.json(results);
     });
 });
 
