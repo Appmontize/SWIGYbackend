@@ -29,7 +29,7 @@ db.connect(err => {
 app.post('/submit', (req, res) => {
     const { name, city, phone, source } = req.body;
     
-    if (!name || !city || !phone) {
+    if (!name || !city || !phone || !source) {
         return res.status(400).send('All fields are required');
     }
 
